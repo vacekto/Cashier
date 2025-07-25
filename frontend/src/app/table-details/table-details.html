@@ -1,0 +1,82 @@
+<div class="card" style="height: 700px; width: 320px;">
+    <div class="card-header">
+        <h5>{{state.selectedTable()?.describtion ?? "no table selected"}}</h5>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let item of selectedItems">{{ item.name }}</li>
+        </ul>
+
+    </div>
+    <div class="card-footer bg-transparent d-flex justify-content-between" style="height: 100px;">
+        <div class="mt-1">
+            <span class="fs-5 fw-bold">Total</span>
+            <p class="fs-4 " style="color: #0fabc4;">2.99 €</p>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="border rounded-circle me-3 cursor-pointer c-payment"
+                [ngClass]="{ 'selected': state.paymentMethod()==='Cash'}" (click)="state.selectPaymentMethod('Cash')">
+                <i class="bi bi-cash-coin d-flex align-items-center fs-3 m-3"></i>
+            </div>
+            <div class="border rounded-circle  cursor-pointer c-payment"
+                [ngClass]="{ 'selected': state.paymentMethod()==='Credit card'}"
+                (click)="state.selectPaymentMethod('Credit card')">
+                <i class="bi bi-credit-card-fill d-flex align-items-center fs-3 m-3"></i>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer bg-transparent d-flex justify-content-between p-0">
+        <button type="button" class="btn fs-5 w-50" style="color: #0fabc4; height: 50px;">Pay</button>
+        <div class="border-start"></div>
+        <button type="button" class="btn fs-5 w-50" style="color: #8ab759;" data-bs-toggle="modal"
+            data-bs-target="#addItemModal">Add item </button>
+    </div>
+
+
+
+
+
+    <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">New waiter</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container mt-4">
+                        <div class="mb-3">
+                            <label for="itemSelect" class="form-label">Select an Item</label>
+                            <select id="itemSelect" class="form-select" [(ngModel)]="selectedItem" name="item">
+                                <option [ngValue]="null">-- Select an item --</option>
+                                <option *ngFor="let option of this.state.menu()" [ngValue]="option">
+                                    {{ option.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div *ngIf="selectedItem" class="alert alert-info mt-3">
+                            <strong>You selected:</strong>
+                            {{ selectedItem.name }} ({{ selectedItem.type }})
+                        </div>
+                    </div>
+
+
+
+                    <ng-template #placeholder>
+                        <div style="height: 58px;"></div>
+                    </ng-template>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                        (click)="this.state.addItem(this.selectedItem)">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

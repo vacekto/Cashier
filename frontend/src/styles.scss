@@ -1,0 +1,28 @@
+@use 'bootstrap/scss/bootstrap' as *;
+
+.c-bg-primary-dark {
+    background-color: #edf0f5;
+}
+
+.c-bg-secondary-light {
+    background-color: #3f4c5a;
+
+}
+
+.c-bg-secondary-dark {
+    background-color: #2b343d;
+
+}
+
+.c-bg-teal {
+    background-color: #0fabc4;
+
+}
+
+* {
+    user-select: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
