@@ -1,17 +1,15 @@
-<div class="c-bg-primary-dark vh-100">
-  <app-top-bar></app-top-bar>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-1"></div>
-      <div class="col-1">
-        <app-waiters />
-      </div>
-      <div class="col-6" style="height: 100%;">
-        <app-tables />
-      </div>
-      <div class="col-3  ">
-        <app-table-details />
-      </div>
-    </div>
+<div class="c-bg-primary-dark vh-100 d-flex flex-column">
+  <app-toast></app-toast>
+  <app-top-bar class="mb-minh"></app-top-bar>
+  <div
+    class="d-flex flex-grow-1 mx-auto w-100 overflow-auto my-3"
+    style="max-width: 1300px; max-height: 800px"
+  >
+    <app-waiters class="d-none d-lg-block p-3"></app-waiters>
+    <app-tables
+      class="d-none d-sm-block p-3 flex-grow-1 d-flex overflow-auto"
+      style="height: 100%"
+    ></app-tables>
+    <app-table-details class="fixed-width-sm-up d-flex"></app-table-details>
   </div>
 </div>

@@ -1,27 +1,46 @@
 package com.cashier;
 
-import io.github.cdimascio.dotenv.Dotenv;
-import static spark.Spark.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import static com.fatboyindustrial.gsonjavatime.Converters.registerAll;
+
+import java.lang.reflect.Modifier;
+
+import com.cashier.services.WsService;
+
+import spark.Spark;
 
 public class App {
+  public static void main(String[] args) {
+    Config.init();
 
-    public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load();
-        int port = Integer.parseInt(dotenv.get("PORT", "3000"));
-        port(port);
+    GsonBuilder builder = new GsonBuilder()
+        .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.STATIC);
+    registerAll(builder);
+    Gson gson = builder.create();
 
-        staticFileLocation("/public");
+    HTTPServer httpServer = new HTTPServer(Config.HTTP_PORT, gson);
 
-        get("/", (req, res) -> {
-            res.redirect("/index.html");
-            return null;
-        });
+    WsServer wsServer = new WsServer(Config.WS_PORT, gson);
 
-        get("/hello", (req, res) -> {
-            res.type("text/plain");
-            return "Hello from Spark Java!";
-        });
+    WsService wsService = new WsService(wsServer, gson);
+    httpServer.injectWsService(wsService);
 
-        System.out.println("Server listening on port " + port);
-    }
+    httpServer.start();
+    System.out.println("HTTP Server listening on port " + Config.HTTP_PORT);
+
+    wsServer.start();
+    System.out.println("Web socket Server listening on port " + Config.WS_PORT);
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      Spark.stop();
+      try {
+        wsServer.stop();
+      } catch (InterruptedException e) {
+        System.out.println(e);
+        e.printStackTrace();
+      }
+    }));
+  }
 }

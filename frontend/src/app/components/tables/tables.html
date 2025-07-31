@@ -1,0 +1,16 @@
+<div class="d-flex flex-wrap gap-4 my-3">
+  @for (table of state.tables(); track table.id) {
+    <div
+      class="card c-bg-teal c-table text-white mb-3 cursor-pointer m-auto"
+      [ngClass]="{ 'c-selected': state.selectedTable()?.id === table.id }"
+      (click)="state.selectTable(table.id)"
+    >
+      <div class="card-body d-flex justify-content-center align-items-center">
+        <h5 class="card-title m-0">{{ table.describtion }}</h5>
+        <small class="position-absolute bottom-0 end-0 m-2">{{
+          table.price
+        }}</small>
+      </div>
+    </div>
+  }
+</div>

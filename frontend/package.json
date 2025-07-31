@@ -9,6 +9,7 @@
     "test": "ng test"
   },
   "prettier": {
+    "singleQuote": false,
     "overrides": [
       {
         "files": "*.html",
@@ -29,11 +30,13 @@
     "@fortawesome/fontawesome-free": "^7.0.0",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
+    "dotenv": "^17.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
+    "@angular-eslint/eslint-plugin": "^20.1.1",
     "@angular/build": "^20.1.1",
     "@angular/cli": "^20.1.1",
     "@angular/compiler-cli": "^20.1.0",
@@ -44,6 +47,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.8.2"
   }
 }

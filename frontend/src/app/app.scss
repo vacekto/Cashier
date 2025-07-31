@@ -1,0 +1,17 @@
+.fixed-width-sm-up {
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .fixed-width-sm-up {
+    width: 400px;
+    flex: 0 0 auto;
+  }
+}
+
+@media (min-height: 1000px) {
+  .mb-minh {
+    margin-bottom: 50px;
+    /* or whatever value you need */
+  }
+}
