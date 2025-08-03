@@ -1,14 +1,13 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, Input, SimpleChanges } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 type TItem = { name: string; id: number };
 
 @Component({
-  selector: 'app-filtered-input',
+  selector: "app-filtered-input",
   imports: [CommonModule, FormsModule],
-  templateUrl: './filtered-input.html',
-  styleUrl: './filtered-input.scss',
+  templateUrl: "./filtered-input.html",
 })
 export class FilteredInput {
   @Input() options: string[] = [];
@@ -16,14 +15,14 @@ export class FilteredInput {
 
   private IdCounter = 1;
   items: TItem[] = [];
-  searchText = '';
+  searchText = "";
   filteredItems: TItem[] = [];
   selectedItem: TItem | null = null;
   extend = false;
   activeIndex: number = -1;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['options']) {
+    if (changes["options"]) {
       this.items = this.options.map((o) => ({ name: o, id: this.IdCounter++ }));
       this.activeIndex = -1;
       this.filterItems();
@@ -44,7 +43,7 @@ export class FilteredInput {
 
   selectItem(item: TItem | null) {
     this.selectedItem = item;
-    this.searchText = item?.name.trim() ?? '';
+    this.searchText = item?.name.trim() ?? "";
     this.extend = false;
   }
 
@@ -76,19 +75,19 @@ export class FilteredInput {
     if (!this.filteredItems.length) return;
 
     switch (event.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         this.activeIndex = (this.activeIndex + 1) % this.filteredItems.length;
         this.filterItems();
         break;
 
-      case 'ArrowUp':
+      case "ArrowUp":
         this.activeIndex =
           (this.activeIndex - 1 + this.filteredItems.length) %
           this.filteredItems.length;
         this.filterItems();
         break;
 
-      case 'Enter':
+      case "Enter":
         if (this.extend) this.selectItem(this.filteredItems[this.activeIndex]);
         else this.handleSubmit();
         break;

@@ -3,8 +3,7 @@
     type="button"
     class="btn fs-5"
     style="color: #fff"
-    data-bs-toggle="modal"
-    data-bs-target="#newWaiterModal"
+    (click)="showWaiterModal()"
   >
     Add waiter
   </button>
@@ -12,108 +11,11 @@
     type="button"
     class="btn fs-5"
     style="color: #fff"
-    data-bs-toggle="modal"
-    data-bs-target="#newTableModal"
+    (click)="showTableModal()"
   >
     Add table
   </button>
 
-  <div
-    class="modal fade"
-    id="newWaiterModal"
-    tabindex="-1"
-    aria-labelledby="modalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel">New waiter</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <div class="modal-body">
-          <input
-            type="text"
-            id="nameInput"
-            placeholder="Waiter name"
-            class="form-control mb-3"
-            [(ngModel)]="waiterName"
-          />
-
-          <!-- Alert shown only when condition is true -->
-          <div
-            *ngIf="showNameTaken; else placeholder"
-            class="alert alert-warning"
-            role="alert"
-          >
-            Name already taken, please choose different one
-          </div>
-
-          <!-- Placeholder keeps space when alert is hidden -->
-          <ng-template #placeholder>
-            <div style="height: 58px"></div>
-            <!-- approx alert height -->
-          </ng-template>
-        </div>
-
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="this.data.registerWaiter(this.waiterName)"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div
-    class="modal fade"
-    id="newTableModal"
-    tabindex="-1"
-    aria-labelledby="modalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel">New table</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <div class="modal-body">
-          <input
-            type="text"
-            id="nameInput"
-            placeholder="Table describtion"
-            class="form-control mb-3"
-            [(ngModel)]="tableDescripbtion"
-          />
-        </div>
-
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="this.data.createTable(this.tableDescripbtion)"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-create-waiter-modal> </app-create-waiter-modal>
+  <app-create-table-modal></app-create-table-modal>
 </div>

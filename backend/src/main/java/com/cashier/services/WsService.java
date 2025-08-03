@@ -1,18 +1,19 @@
 package com.cashier.services;
 
 import com.cashier.WsServer;
-import com.cashier.data.Table;
 import com.cashier.data.Waiter;
 import com.google.gson.Gson;
 import org.java_websocket.WebSocket;
 
 public class WsService {
-  private static enum Event {
+
+  static enum Event {
     NEW_TABLE,
-    NEW_WAITER
+    NEW_WAITER,
+    TABLE_UPDATE
   }
 
-  private static record Message(Event event, Object payload) {
+  record WsMessage(Event event, Object payload) {
   }
 
   private WsServer socketServer;
@@ -23,7 +24,7 @@ public class WsService {
     this.socketServer = wsServer;
   }
 
-  private void broadcastMessage(Message msg) {
+  private void broadcastMessage(WsMessage msg) {
     String jsonMsg = gson.toJson(msg);
 
     for (WebSocket conn : socketServer.getConnections()) {
@@ -32,13 +33,18 @@ public class WsService {
     }
   }
 
-  public void newTableNotification(Table table) {
-    Message msg = new Message(Event.NEW_TABLE, table);
+  public void newTable(com.cashier.data.Table table) {
+    WsMessage msg = new WsMessage(Event.NEW_TABLE, table);
     this.broadcastMessage(msg);
   }
 
-  public void newWaiterNotification(Waiter waiter) {
-    Message msg = new Message(Event.NEW_WAITER, waiter);
+  public void tableUpdate(com.cashier.data.Table table) {
+    WsMessage msg = new WsMessage(Event.TABLE_UPDATE, table);
+    this.broadcastMessage(msg);
+  }
+
+  public void newWaiter(Waiter waiter) {
+    WsMessage msg = new WsMessage(Event.NEW_WAITER, waiter);
     this.broadcastMessage(msg);
   }
 }

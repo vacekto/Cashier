@@ -1,75 +1,81 @@
 package com.cashier.data;
 
-// volume in gram for MEAL and miligram for DRINK
-public enum MenuItem {
-  BURGER("Burger", 9.99, Type.MEAL, 150, 1),
-  PIZZA("Pizza", 12.49, Type.MEAL, 120, 2),
-  SALAD("Salad", 7.99, Type.MEAL, 70, 3),
-  SODA("Soda", 1.99, Type.DRINK, 60, 4),
-  PLZEN("Pivo", 1.90, Type.DRINK, 60, 5),
-  POLICKA("Pivocosikdosi", 1.99, Type.DRINK, 80, 6);
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import com.cashier.records.MenuRecord;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import java.io.IOException;
 
-  public static enum Type {
+public abstract class MenuItem {
+  private static HashMap<String, MenuItem> store = new HashMap<String, MenuItem>();
+  private static Gson gson;
+
+  public static void injectGson(Gson gson) {
+    if (MenuItem.gson == null) {
+      MenuItem.gson = gson;
+    }
+  }
+
+  public static MenuItem getItemById(String id) {
+    return MenuItem.store.get(id);
+  }
+
+  public static MenuRecord getMenu() {
+    List<Meal> meals = new ArrayList<Meal>();
+    List<Drink> drinks = new ArrayList<Drink>();
+
+    for (MenuItem item : MenuItem.store.values()) {
+      if (item instanceof Drink)
+        drinks.add((Drink) item);
+      if (item instanceof Meal)
+        meals.add((Meal) item);
+    }
+    return new MenuRecord(meals, drinks);
+  }
+
+  public static void loadMenuItems() {
+    try (JsonReader reader = new JsonReader(new FileReader("menu.json"))) {
+      java.lang.reflect.Type listType = new TypeToken<List<MenuItem>>() {
+      }.getType();
+
+      List<MenuItem> items = gson.fromJson(reader, listType);
+
+      for (MenuItem item : items) {
+        String id = UUID.randomUUID().toString();
+        item.id = id;
+        MenuItem.store.put(id, item);
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  protected enum Type {
     MEAL, DRINK
   }
 
   private final String name;
   private final double price;
   private final Type type;
-  private final int volume;
-  private final int id;
+  private String id;
 
-  MenuItem(String name, double price, Type type, int volume, int id) {
+  protected MenuItem(String name, double price, Type type) {
+    String id = UUID.randomUUID().toString();
+    this.id = id;
     this.name = name;
     this.price = price;
     this.type = type;
-    this.volume = volume;
-    this.id = id;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public double getPrice() {
-    return price;
-  }
-
-  public Type getType() {
-    return type;
-  }
-
-  public int getVolume() {
-    return volume;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public static class DTO {
-    final String name;
-    final double price;
-    final MenuItem.Type type;
-    final int volume;
-    final int id;
-
-    private DTO(MenuItem item) {
-      this.name = item.getName();
-      this.price = item.getPrice();
-      this.type = item.getType();
-      this.volume = item.getVolume();
-      this.id = item.getId();
-    }
-
-    @Override
-    public String toString() {
-      return "MenuItemDTO{ name='" + name + "', price=" + price + ", type=" + type + " }";
-    }
-  }
-
-  public static DTO createDto(MenuItem type) {
-    return new MenuItem.DTO(type);
+  @Override
+  public String toString() {
+    return "MenuItemDTO{ name='" + name + "'}";
   }
 
 }

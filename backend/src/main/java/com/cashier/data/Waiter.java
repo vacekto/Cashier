@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class Waiter {
   private final String id;
+
   private final String name;
 
   private static final Map<String, Waiter> store = new HashMap<>();

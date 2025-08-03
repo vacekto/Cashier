@@ -13,14 +13,12 @@
         </option>
       }
     </select>
-
-    <!-- <h5>{{state.selectedTable()?.describtion ?? "no table selected"}}</h5> -->
   </div>
   <div class="card-body">
     <ul class="list-group list-group-flush">
-      @for (item of selectedItems; track item.id) {
+      @for (item of selectedItems; track item.menuItem.id) {
         <li class="list-group-item">
-          {{ `${item.count} x ${item.describtion}` }}
+          {{ `${item.count} x ${item.menuItem.describtion}` }}
         </li>
       }
     </ul>

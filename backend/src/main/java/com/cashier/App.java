@@ -2,30 +2,40 @@ package com.cashier;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
+import io.gsonfire.GsonFireBuilder;
+import java.time.Instant;
 
-import static com.fatboyindustrial.gsonjavatime.Converters.registerAll;
-
-import java.lang.reflect.Modifier;
-
+import com.cashier.data.MenuItem;
+import com.cashier.services.HttpService;
 import com.cashier.services.WsService;
-
+import com.cashier.util.MenuItemTypeSelector;
 import spark.Spark;
 
 public class App {
   public static void main(String[] args) {
     Config.init();
 
-    GsonBuilder builder = new GsonBuilder()
-        .excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.STATIC);
-    registerAll(builder);
-    Gson gson = builder.create();
+    GsonFireBuilder fireBuilder = new GsonFireBuilder();
+    fireBuilder.registerTypeSelector(MenuItem.class, new MenuItemTypeSelector());
 
-    HTTPServer httpServer = new HTTPServer(Config.HTTP_PORT, gson);
+    GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder()
+        .registerTypeAdapter(Instant.class,
+            (JsonSerializer<Instant>) (src, _, _) -> new JsonPrimitive(src.toString()))
+        .registerTypeAdapter(Instant.class,
+            (JsonDeserializer<Instant>) (json, _, _) -> Instant.parse(json.getAsString()));
 
-    WsServer wsServer = new WsServer(Config.WS_PORT, gson);
+    Gson gson = gsonBuilder.create();
 
+    MenuItem.injectGson(gson);
+    MenuItem.loadMenuItems();
+
+    WsServer wsServer = new WsServer(Config.WS_PORT);
     WsService wsService = new WsService(wsServer, gson);
-    httpServer.injectWsService(wsService);
+    HttpService httpService = new HttpService(wsService, gson);
+    HTTPServer httpServer = new HTTPServer(Config.HTTP_PORT, gson, httpService);
 
     httpServer.start();
     System.out.println("HTTP Server listening on port " + Config.HTTP_PORT);

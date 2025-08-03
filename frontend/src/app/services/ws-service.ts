@@ -14,6 +14,10 @@ export type SocketMessage =
   | {
       event: "NEW_WAITER";
       payload: Waiter;
+    }
+  | {
+      event: "TABLE_UPDATE";
+      payload: TableDTO;
     };
 
 @Injectable({
@@ -38,6 +42,10 @@ export class WsService {
         break;
       case "NEW_WAITER":
         this.state.addWaiter(msg.payload);
+        break;
+      case "TABLE_UPDATE":
+        const tableUpdate = new Table(msg.payload);
+        this.state.updateSingleTable(tableUpdate);
         break;
       default:
         console.warn(`UNHANDLED WEB SOCKET EVENT FROM SERVER !!: ${event}`);

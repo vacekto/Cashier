@@ -1,4 +1,3 @@
-// toast.service.ts
 import { Injectable, signal } from "@angular/core";
 
 export type UrgencyLevel = "INFO" | "ERROR" | "WARNING";

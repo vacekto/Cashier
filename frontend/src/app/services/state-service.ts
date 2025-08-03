@@ -1,6 +1,7 @@
 import { Injectable, signal } from "@angular/core";
 import { Table } from "../util/Table";
-import { MenuItem, Waiter } from "../util/types";
+import { Waiter } from "../util/types";
+import { MenuItem } from "../util/MenuItem";
 
 @Injectable({ providedIn: "root" })
 export class StateService {
@@ -11,13 +12,12 @@ export class StateService {
   selectedTable = signal<Table | null>(null);
   paymentMethod = signal<"Credit card" | "Cash" | null>(null);
 
-  focusWaiter(id: string) {
+  selectWaiter(id: string) {
     this.selectedWaiterId.set(id);
   }
 
   selectTable(id: string) {
     let table = this.tables().find((t) => t.id === id) ?? null;
-
     this.selectedTable.set(table);
   }
 
@@ -27,7 +27,6 @@ export class StateService {
 
   addTable(newTable: Table) {
     this.tables.update((prev) => [...prev, newTable]);
-    console.log(this.tables());
   }
 
   addWaiter(waiter: Waiter) {
@@ -38,11 +37,23 @@ export class StateService {
     this.menu.set(menu);
   }
 
-  updateTables(tables: Table[]) {
+  updateAllTables(tables: Table[]) {
     this.tables.set(tables);
   }
 
   updateWaiters(waiters: Waiter[]) {
     this.waiters.set(waiters);
+  }
+  updateSingleTable(tableUpdate: Table) {
+    let index = this.tables().findIndex((table) => table.id === tableUpdate.id);
+    if (index === -1) return;
+
+    this.tables.update((prev) => {
+      prev[index] = tableUpdate;
+      return [...prev];
+    });
+
+    if (this.selectedTable()?.id === tableUpdate.id)
+      this.selectedTable.set(tableUpdate);
   }
 }

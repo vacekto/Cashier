@@ -1,23 +1,27 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { StateService } from "../../services/state-service";
-import { DataService } from "../../services/data-service";
+import { CreateTableModal } from "./modals/create-table-modal/create-table-modal";
+import { CreateWaiterModal } from "./modals/create-waiter-modal/create-waiter-modal";
 
 @Component({
   selector: "app-top-bar",
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, CreateTableModal, CreateWaiterModal],
   templateUrl: "./top-bar.html",
   styleUrl: "./top-bar.scss",
 })
 export class TopBar {
-  constructor(
-    public state: StateService,
-    public data: DataService,
-  ) {}
+  @ViewChild(CreateTableModal) tableModalComp!: CreateTableModal;
+  @ViewChild(CreateWaiterModal) waiterModalComp!: CreateWaiterModal;
 
-  waiterName = "";
-  tableDescripbtion = "";
+  constructor(public state: StateService) {}
 
-  showNameTaken = true;
+  public showTableModal() {
+    this.tableModalComp.modalInstance.show();
+  }
+
+  public showWaiterModal() {
+    this.waiterModalComp.modalInstance.show();
+  }
 }

@@ -1,7 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ENV } from "../../environments/environment";
-import { MenuItem, TableDTO, Waiter } from "../util/types";
+import { Menu, NewOrderDTO, TableDTO, Waiter } from "../util/types";
 import { ToastService } from "./toast-service";
+import { MenuItem } from "../util/MenuItem";
+import { Table } from "../util/Table";
+import { Drink } from "../util/Drink";
+import { Meal } from "../util/Meal";
 
 @Injectable({
   providedIn: "root",
@@ -48,13 +52,7 @@ export class DataService {
   }
 
   async getMenu() {
-    const data = await this.fetchAPIResource<MenuItem[]>("/menu");
-    if (data)
-      data.forEach(
-        (i) =>
-          (i.describtion = `${i.name} ${i.volume} ${i.type === "DRINK" ? "ml" : "g"}`),
-      );
-    return data;
+    return await this.fetchAPIResource<Menu>("/menu");
   }
 
   async getTables() {
@@ -63,5 +61,18 @@ export class DataService {
 
   async getWaiters() {
     return this.fetchAPIResource<Waiter[]>("/waiters");
+  }
+
+  async sendNewOrder(newOrder: NewOrderDTO) {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(newOrder),
+    };
+
+    return this.fetchAPIResource<{}>("/table/order", options);
+  }
+
+  async test() {
+    return this.fetchAPIResource<any>("/test");
   }
 }

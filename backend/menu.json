@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Soda",
+    "price": 5.1,
+    "volume": 100,
+    "type": "DRINK"
+  },
+  {
+    "name": "Cola",
+    "price": 6.66,
+    "volume": 69,
+    "type": "DRINK"
+  },
+  {
+    "name": "Water",
+    "price": 150.35,
+    "volume": 90,
+    "type": "DRINK"
+  },
+  {
+    "name": "Burger",
+    "price": 100.9,
+    "weight": 100,
+    "type": "MEAL"
+  },
+  {
+    "name": "Pizza",
+    "price": 66.99,
+    "weight": 150,
+    "type": "MEAL"
+  },
+  {
+    "name": "Salad",
+    "price": 150.35,
+    "weight": 90,
+    "type": "MEAL"
+  }
+]

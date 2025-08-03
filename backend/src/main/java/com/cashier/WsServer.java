@@ -1,31 +1,14 @@
 package com.cashier;
 
 import org.java_websocket.server.WebSocketServer;
-import com.google.gson.Gson;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import java.net.InetSocketAddress;
 
 public class WsServer extends WebSocketServer {
-  private Gson gson;
 
-  public static enum Event {
-    NEW_TABLE
-  }
-
-  private static class Message {
-    Event event;
-    String payload;
-
-    Message(Event event, String payload) {
-      this.event = event;
-      this.payload = payload;
-    }
-  }
-
-  public WsServer(int port, Gson gson) {
+  public WsServer(int port) {
     super(new InetSocketAddress(port));
-    this.gson = gson;
     this.setReuseAddr(true);
 
   }
@@ -37,7 +20,8 @@ public class WsServer extends WebSocketServer {
 
   @Override
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-    System.out.println("Closed: " + reason);
+    if (reason != null)
+      System.out.println("Closed: " + reason);
   }
 
   @Override
@@ -56,12 +40,4 @@ public class WsServer extends WebSocketServer {
     System.out.println("WebSocket server started");
   }
 
-  public void broadcastMessage(Event event, String payload) {
-    Message msg = new Message(event, payload);
-    String jsonMsg = gson.toJson(msg);
-    for (WebSocket conn : getConnections()) {
-      if (conn.isOpen())
-        conn.send(jsonMsg);
-    }
-  }
 }

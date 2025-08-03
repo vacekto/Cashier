@@ -6,16 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.cashier.OrderedItem;
-
 public class Table {
   private static final Map<String, Table> store = new HashMap<>();
 
-  private final String id;
+  public static Table getTableById(String id) {
+    return Table.store.get(id);
+  }
 
-  private final String describtion;
+  public static List<Table> getAllTables() {
+    return new ArrayList<>(store.values());
+  }
 
-  private List<OrderedItem> items;
+  final String id;
+  String describtion;
+  List<OrderedItem> items;
 
   public Table(String describtion) {
     this.id = UUID.randomUUID().toString();
@@ -24,8 +28,8 @@ public class Table {
     store.put(this.id, this);
   }
 
-  public static List<Table> getAllTables() {
-    return new ArrayList<>(store.values());
+  public void addOrder(OrderedItem item) {
+    this.items.add(item);
   }
 
 }
