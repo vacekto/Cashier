@@ -1,0 +1,76 @@
+<div
+  class="modal fade"
+  tabindex="-1"
+  aria-labelledby="addItemModal"
+  aria-hidden="true"
+  #addItemModal
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header mb-3">
+        <h5 class="modal-title" id="modalLabel">New order</h5>
+        <button type="button" class="btn-close" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <app-filtered-input [options]="menuItemsStr" [cb]="addItem">
+        </app-filtered-input>
+      </div>
+      <div class="container mb-5">
+        <div style="max-height: 250px; overflow-y: auto">
+          <table class="table table-borderless w-100">
+            <colgroup>
+              <col />
+              <col style="width: 180px" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="fs-5">Item</th>
+                <th class="fs-5">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="c-bg-primary-dark">
+              @for (item of orders(); track item.menuItem.id) {
+                <tr class="my-5">
+                  <td class="py-2 fs-6">
+                    {{ item.menuItem.describtion }}
+                  </td>
+                  <td class="py-2 d-flex align-items-center">
+                    <button
+                      class="btn btn-secondary d-flex align-items-center justify-content-center p-0"
+                      style="width: 30px; height: 30px"
+                      (click)="decrement(item.menuItem.id)"
+                    >
+                      <i class="bi bi-dash"></i>
+                    </button>
+
+                    <span class="mx-3 fs-5">
+                      {{ item.count }}
+                    </span>
+
+                    <button
+                      class="btn btn-secondary d-flex align-items-center justify-content-center p-0"
+                      style="width: 30px; height: 30px"
+                      (click)="increment(item.menuItem.id)"
+                    >
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer" style="border-top: none">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isButtonDisabled()"
+          (click)="submit()"
+        >
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

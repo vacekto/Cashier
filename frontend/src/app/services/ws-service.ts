@@ -3,8 +3,9 @@ import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import { ENV } from "../../environments/environment";
 import { StateService } from "./state-service";
 import { ToastService } from "./toast-service";
-import { TableDTO, Waiter } from "../util/types";
-import { Table } from "../util/Table";
+import { Table } from "../util/models/Table";
+import { TableDTO } from "../util/types/API";
+import { Waiter } from "../util/types/app";
 
 export type SocketMessage =
   | {
@@ -39,16 +40,26 @@ export class WsService {
       case "NEW_TABLE":
         const newTable = new Table(msg.payload);
         this.state.addTable(newTable);
+        this.toast.addToast(
+          "new table",
+          `Table ${msg.payload.describtion} was created`,
+          "INFO",
+        );
         break;
       case "NEW_WAITER":
         this.state.addWaiter(msg.payload);
+        this.toast.addToast(
+          "new waiter",
+          `Waiter ${msg.payload.name} was registered`,
+          "INFO",
+        );
         break;
       case "TABLE_UPDATE":
         const tableUpdate = new Table(msg.payload);
         this.state.updateSingleTable(tableUpdate);
         break;
       default:
-        console.warn(`UNHANDLED WEB SOCKET EVENT FROM SERVER !!: ${event}`);
+        console.warn(`UNHANDLED WEB SOCKET EVENT FROM SERVER: ${event}`);
     }
   }
 

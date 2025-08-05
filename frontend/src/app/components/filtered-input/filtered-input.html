@@ -1,0 +1,74 @@
+<div class="mb-3 d-none d-lg-flex gap-2 position-relative input-group-lg">
+  <input
+    placeholder="Search item.."
+    [(ngModel)]="searchText"
+    (input)="handleChange()"
+    (focus)="onFocus()"
+    (keydown)="onKeyDown($event)"
+    (blur)="hideDropdown()"
+    class="form-control"
+    [attr.fid]="id"
+  />
+
+  <button
+    class="btn btn-primary position-relative"
+    (click)="handleSubmit()"
+    [disabled]="filteredItems.length === 0"
+  >
+    Add
+  </button>
+
+  <ul
+    *ngIf="extend && filteredItems.length > 0"
+    class="list-group position-absolute mt-2 top-100 w-100 shadow z-3"
+  >
+    @for (item of filteredItems; track item.id) {
+      <li
+        class="list-group-item list-group-item-action"
+        [ngClass]="{ active: $index === activeIndex }"
+        (mousedown)="selectItem(item)"
+        (mouseenter)="mouseEnter($index)"
+        (mouseleave)="mouseLeave($index)"
+      >
+        {{ item.name.trim() }}
+      </li>
+    }
+  </ul>
+</div>
+
+<div class="mb-3 d-flex d-lg-none gap-2 position-relative input-group">
+  <input
+    placeholder="Search item.."
+    [(ngModel)]="searchText"
+    (input)="handleChange()"
+    (focus)="onFocus()"
+    (keydown)="onKeyDown($event)"
+    (blur)="hideDropdown()"
+    class="form-control"
+  />
+
+  <button
+    class="btn btn-primary position-relative"
+    (click)="handleSubmit()"
+    [disabled]="filteredItems.length === 0"
+  >
+    Add
+  </button>
+
+  <ul
+    *ngIf="extend && filteredItems.length > 0"
+    class="list-group position-absolute mt-2 top-100 w-100 shadow z-3"
+  >
+    @for (item of filteredItems; track item.id) {
+      <li
+        class="list-group-item list-group-item-action"
+        [ngClass]="{ active: $index === activeIndex }"
+        (mousedown)="selectItem(item)"
+        (mouseenter)="mouseEnter($index)"
+        (mouseleave)="mouseLeave($index)"
+      >
+        {{ item.name.trim() }}
+      </li>
+    }
+  </ul>
+</div>

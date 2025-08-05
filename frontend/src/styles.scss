@@ -23,3 +23,35 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+$teal-light: #008da3;
+$teal-dark: #00788a;
+
+$dark-light: #3f4c5a;
+$dark-dark: #2b343d;
+
+@mixin btn-custom($light, $dark) {
+  background-color: $light;
+  border-color: $light;
+
+  &:hover {
+    background-color: $dark; // optional
+    border-color: $dark;
+  }
+
+  &:focus,
+  &:active,
+  &.active {
+    background-color: $dark !important;
+    border-color: $dark !important;
+    box-shadow: 0 0 0 0.25rem rgba($light, 0.25);
+  }
+}
+
+.btn-primary {
+  @include btn-custom($teal-light, $teal-dark);
+}
+
+.btn-secondary {
+  @include btn-custom($dark-light, $dark-dark);
+}

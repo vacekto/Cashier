@@ -1,4 +1,4 @@
-<div class="toast-container bottom-0 end-0 p-3" style="z-index: 1055">
+<div class="toast-container top-0 end-0 p-3">
   @for (toast of toastService.activeToasts(); track toast.id) {
     <div
       class="toast show border-0"
@@ -8,7 +8,7 @@
       aria-atomic="true"
     >
       <div class="d-flex alert" [ngClass]="toast.level">
-        <div class="toast-body">
+        <div class="toast-body fs-6 fw-bold">
           {{ toast.message }}
         </div>
         <button

@@ -18,8 +18,8 @@ public class Table {
   }
 
   final String id;
-  String describtion;
-  List<OrderedItem> items;
+  final String describtion;
+  private List<OrderedItem> items;
 
   public Table(String describtion) {
     this.id = UUID.randomUUID().toString();

@@ -20,8 +20,7 @@ public class WsServer extends WebSocketServer {
 
   @Override
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-    if (reason != null)
-      System.out.println("Closed: " + reason);
+    System.out.println("Connection lost with " + conn.getRemoteSocketAddress() + " reason:" + reason);
   }
 
   @Override

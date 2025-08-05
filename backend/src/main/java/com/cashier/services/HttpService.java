@@ -1,7 +1,6 @@
 package com.cashier.services;
 
 import static spark.Spark.*;
-
 import com.cashier.data.MenuItem;
 import com.cashier.data.OrderedItem;
 import com.cashier.data.Table;
@@ -28,7 +27,6 @@ public class HttpService {
     get("/menu", (_, res) -> {
       res.type("application/json");
       MenuRecord menu = MenuItem.getMenu();
-      System.out.println(menu);
       return menu;
     }, gson::toJson);
 
@@ -60,7 +58,6 @@ public class HttpService {
 
     post("/table/order", (req, res) -> {
       res.type("application/json");
-
       NewOrderRecord nor = gson.fromJson(req.body(), NewOrderRecord.class);
       Table table = Table.getTableById(nor.tableId());
       for (NewItemRecord nir : nor.orderedItems()) {
@@ -68,9 +65,14 @@ public class HttpService {
           OrderedItem newOrderedItem = new OrderedItem(nir.menuItemId());
           table.addOrder(newOrderedItem);
         }
-
       }
       this.wsService.tableUpdate(table);
+
+      return "{}";
+    }, gson::toJson);
+
+    post("/table/receipt", (req, res) -> {
+      res.type("application/json");
 
       return "{}";
     }, gson::toJson);

@@ -1,0 +1,16 @@
+.fixed-width-sm-up {
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .fixed-width-sm-up {
+    width: 400px;
+    flex: 0 0 auto;
+  }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

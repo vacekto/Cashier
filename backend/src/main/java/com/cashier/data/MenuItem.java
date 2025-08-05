@@ -64,13 +64,15 @@ public abstract class MenuItem {
   private final double price;
   private final Type type;
   private String id;
+  private final double VAT;
 
-  protected MenuItem(String name, double price, Type type) {
+  protected MenuItem(String name, double price, Type type, double vat) {
     String id = UUID.randomUUID().toString();
     this.id = id;
     this.name = name;
     this.price = price;
     this.type = type;
+    this.VAT = vat;
   }
 
   @Override

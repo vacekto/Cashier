@@ -1,0 +1,110 @@
+<div class="c-bg-secondary-dark d-flex" style="height: 90px">
+  <div class="d-flex align-items-center mx-5">
+    <button class="btn btn-lg btn-light" (click)="back()">
+      <i class="bi bi-chevron-left"></i> Backs
+    </button>
+  </div>
+</div>
+<div
+  class="flex-grow-1 d-flex justify-content-center my-5"
+  style="max-height: 800px"
+>
+  <div class="card d-flex flex-column" style="width: 520px">
+    <div class="flex-grow-1 overflow-auto">
+      <div class="card-header p-3">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <h5>Remaining</h5>
+          <button (click)="addEverything()" class="btn btn-primary">
+            Pay everything
+          </button>
+        </div>
+      </div>
+      <ul class="list-group list-group-flush">
+        @for (item of orderItems(); track item.menuItem.id) {
+          <div
+            class="d-flex align-items-center justify-content-between list-group-item"
+          >
+            <div>
+              <span class="fw-bold fs-5"> {{ item.count }} </span>
+              <span class="fs-5"> x {{ item.menuItem.describtion }} </span>
+            </div>
+            <div class="d-flex justify-content-end gap-3">
+              <button
+                (click)="addSingleItemToReceipt(item.menuItem.id)"
+                class="btn btn-secondary btn-md"
+              >
+                Pay 1
+              </button>
+              <button
+                (click)="addAllItemsToReceipt(item.menuItem.id)"
+                class="btn btn-secondary btn-md"
+              >
+                Pay all
+              </button>
+            </div>
+          </div>
+        }
+      </ul>
+
+      <h5 class="card-header p-3">Receipt</h5>
+
+      <ul class="list-group list-group-flush">
+        @for (item of receiptItems(); track item.menuItem.id) {
+          <div
+            class="d-flex align-items-center justify-content-between list-group-item"
+          >
+            <div>
+              <span class="fw-bold fs-5"> {{ item.count }} </span>
+              <span class="fs-5"> x {{ item.menuItem.describtion }} </span>
+            </div>
+            <div class="d-flex justify-content-end fs-5 gap-3">
+              {{ (item.count * item.menuItem.price).toFixed(2) }}
+            </div>
+          </div>
+        }
+      </ul>
+    </div>
+    <div
+      class="card-footer bg-transparent d-flex justify-content-between"
+      style="height: 100px"
+    >
+      <div class="mt-1">
+        <span class="fs-5 fw-bold">Total</span>
+        <p class="fs-3" style="color: #0fabc4">
+          {{ receiptPrice().toFixed(2) }}
+        </p>
+      </div>
+      <div class="d-flex align-items-center">
+        <div
+          class="border rounded-circle me-3 cursor-pointer c-payment"
+          [ngClass]="{ selected: state.paymentMethod() === 'CASH' }"
+          (click)="state.selectPaymentMethod('CASH')"
+          title="Cash"
+        >
+          <i class="bi bi-cash-coin d-flex align-items-center fs-3 m-3"></i>
+        </div>
+        <div
+          class="border rounded-circle cursor-pointer c-payment"
+          [ngClass]="{ selected: state.paymentMethod() === 'CREDIT CARD' }"
+          (click)="state.selectPaymentMethod('CREDIT CARD')"
+          title="Credit card"
+        >
+          <i
+            class="bi bi-credit-card-fill d-flex align-items-center fs-3 m-3"
+          ></i>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-transparent d-flex justify-content-between p-0">
+      <button
+        type="button"
+        class="btn w-100"
+        style="color: #0fabc4; height: 70px"
+        (click)="pay()"
+        title="This top tooltip is themed via CSS variables."
+      >
+        <h3>Pay</h3>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,12 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ToastService } from '../../services/toast-service';
+import { CommonModule } from "@angular/common";
+import { Component } from "@angular/core";
+import { ToastService } from "../../services/toast-service";
 
 @Component({
-  selector: 'app-toast',
+  selector: "app-toast",
   imports: [CommonModule],
-  templateUrl: './toast.html',
-  styleUrl: './toast.scss',
+  templateUrl: "./toast.html",
 })
 export class Toast {
   constructor(public toastService: ToastService) {}

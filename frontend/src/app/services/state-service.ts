@@ -1,7 +1,7 @@
 import { Injectable, signal } from "@angular/core";
-import { Table } from "../util/Table";
-import { Waiter } from "../util/types";
-import { MenuItem } from "../util/MenuItem";
+import { Table } from "../util/models/Table";
+import { MenuItem } from "../util/models/MenuItem";
+import { PaymentMethod, Waiter } from "../util/types/app";
 
 @Injectable({ providedIn: "root" })
 export class StateService {
@@ -10,7 +10,7 @@ export class StateService {
   menu = signal<MenuItem[]>([]);
   selectedWaiterId = signal<string | null>(null);
   selectedTable = signal<Table | null>(null);
-  paymentMethod = signal<"Credit card" | "Cash" | null>(null);
+  paymentMethod = signal<PaymentMethod | null>(null);
 
   selectWaiter(id: string) {
     this.selectedWaiterId.set(id);
@@ -21,7 +21,7 @@ export class StateService {
     this.selectedTable.set(table);
   }
 
-  selectPaymentMethod(method: "Credit card" | "Cash") {
+  selectPaymentMethod(method: PaymentMethod) {
     this.paymentMethod.set(method);
   }
 
