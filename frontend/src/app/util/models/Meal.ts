@@ -1,5 +1,5 @@
 import { MenuItem } from "./MenuItem";
-import { MenuItemDTO } from "../types/API";
+import { MenuItemDTO } from "../types/APItypes";
 
 export class Meal implements MenuItem {
   name: string;

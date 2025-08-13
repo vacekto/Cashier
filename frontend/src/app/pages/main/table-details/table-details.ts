@@ -71,7 +71,7 @@ export class TableDetails {
       return;
     }
 
-    if (!this.state.selectedWaiterId()) {
+    if (!this.state.selectedWaiter()) {
       this.toasts.addToast(
         "no waiter selected",
         "Waiter finalizing the payment must be selected",

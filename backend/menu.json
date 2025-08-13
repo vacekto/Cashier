@@ -4,41 +4,41 @@
     "price": 5.1,
     "volume": 100,
     "type": "DRINK",
-    "vat": 10
+    "VAT": 10.0
   },
   {
     "name": "Cola",
     "price": 6.66,
     "volume": 69,
     "type": "DRINK",
-    "vat": 10
+    "VAT": 10.0
   },
   {
     "name": "Water",
     "price": 150.35,
     "volume": 90,
     "type": "DRINK",
-    "vat": 10
+    "VAT": 10.0
   },
   {
     "name": "Burger",
     "price": 100.9,
     "weight": 100,
     "type": "MEAL",
-    "vat": 20
+    "VAT": 20.0
   },
   {
     "name": "Pizza",
     "price": 66.99,
     "weight": 150,
     "type": "MEAL",
-    "vat": 20
+    "VAT": 20.0
   },
   {
     "name": "Salad",
     "price": 150.35,
     "weight": 90,
     "type": "MEAL",
-    "vat": 20
+    "VAT": 20.0
   }
 ]

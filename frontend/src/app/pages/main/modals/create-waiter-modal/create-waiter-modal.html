@@ -19,32 +19,58 @@
       </div>
 
       <div class="modal-body">
-        <form (ngSubmit)="submit()" id="waiterNameFrom">
+        <form
+          #tableForm="ngForm"
+          (ngSubmit)="submit(tableForm)"
+          id="waiterCreationFrom"
+        >
           <div class="form-floating">
             <input
-              name="waiterName"
+              name="waiterCreation"
               type="text"
-              id="waiterName"
-              placeholder="Waiter name"
+              id="waiterCreation"
+              placeholder="Table description"
               class="form-control mb-3"
               [(ngModel)]="waiterName"
+              #descCtrl="ngModel"
+              required
+              minlength="6"
             />
-            <label for="waiterName">Waiter name</label>
-          </div>
-        </form>
-        <div
-          class="alert alert-warning"
-          role="alert"
-          [ngClass]="errorMsg ? 'd-block' : 'd-none'"
-        >
-          {{ errorMsg }}
-        </div>
+            <label for="waiterCreation">Table description</label>
 
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" form="waiterNameFrom">
-            Create
+            <div class="position-relative" style="height: 40px">
+              @if (descCtrl.invalid && descCtrl.touched) {
+                <div
+                  class="text-danger mt-1 position-absolute"
+                  style="right: 0"
+                >
+                  @if (descCtrl.errors?.["required"]) {
+                    <small> Name is required. </small>
+                  }
+                  @if (descCtrl.errors?.["minlength"]) {
+                    <small> Must be at least 6 characters. </small>
+                  }
+                </div>
+              }
+              @if (errorMsg) {
+                <div
+                  class="text-danger mt-1 position-absolute"
+                  style="right: 0"
+                >
+                  <small> {{ errorMsg }} </small>
+                </div>
+              }
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary mt-2 float-end"
+            form="waiterCreationFrom"
+          >
+            Create Table
           </button>
-        </div>
+        </form>
       </div>
     </div>
   </div>

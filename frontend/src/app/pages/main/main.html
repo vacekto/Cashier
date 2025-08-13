@@ -18,14 +18,17 @@
 </div>
 
 <div
-  class="d-flex mx-auto my-3 h-100 flex-grow-1"
+  class="d-flex my-3 h-100 mx-auto w-100"
   style="max-width: 1300px; max-height: 800px"
 >
   <app-waiters class="d-none d-lg-block p-3"></app-waiters>
   <app-tables
     class="d-none d-sm-block p-3 flex-grow-1 overflow-auto"
   ></app-tables>
-  <app-table-details class="d-flex" style="width: 400px"></app-table-details>
+  <app-table-details
+    class="d-flex mx-auto"
+    style="width: 400px"
+  ></app-table-details>
 </div>
 
 <app-create-waiter-modal> </app-create-waiter-modal>

@@ -18,6 +18,7 @@ export class ToastService {
     const isSome = this.activeToasts().some(
       (t) => t.describtion === describtion,
     );
+
     if (isSome) return;
 
     let alertKind = "";
@@ -36,12 +37,14 @@ export class ToastService {
         break;
       }
     }
+
     const toast: ToastData = {
       describtion,
       message,
       level: alertKind,
       id: this.toastId++,
     };
+
     this.activeToasts.update((prev) => [...prev, toast]);
 
     setTimeout(() => this.removeToast(describtion), this.toastDuration);

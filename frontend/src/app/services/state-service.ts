@@ -1,19 +1,32 @@
 import { Injectable, signal } from "@angular/core";
 import { Table } from "../util/models/Table";
 import { MenuItem } from "../util/models/MenuItem";
-import { PaymentMethod, Waiter } from "../util/types/app";
+import { PAYMENT_METHOD, Receipt, Waiter } from "../util/types/apptypes";
+
+type ReceiptDate = Receipt & {
+  date: Date;
+};
 
 @Injectable({ providedIn: "root" })
 export class StateService {
   tables = signal<Table[]>([]);
   waiters = signal<Waiter[]>([]);
   menu = signal<MenuItem[]>([]);
-  selectedWaiterId = signal<string | null>(null);
+  selectedWaiter = signal<Waiter | null>(null);
   selectedTable = signal<Table | null>(null);
-  paymentMethod = signal<PaymentMethod | null>(null);
+  paymentMethod = signal<PAYMENT_METHOD | null>(null);
+  receipt = signal<ReceiptDate | null>(null);
+
+  setReceipt(receipt: Receipt) {
+    const r: any = receipt;
+    r.date = new Date(receipt.date);
+    this.receipt.set(r);
+  }
 
   selectWaiter(id: string) {
-    this.selectedWaiterId.set(id);
+    const waiter = this.waiters().find((w) => w.id === id);
+    if (!waiter) throw new Error("no waiter found");
+    this.selectedWaiter.set(waiter);
   }
 
   selectTable(id: string) {
@@ -21,7 +34,7 @@ export class StateService {
     this.selectedTable.set(table);
   }
 
-  selectPaymentMethod(method: PaymentMethod) {
+  selectPaymentMethod(method: PAYMENT_METHOD) {
     this.paymentMethod.set(method);
   }
 

@@ -1,0 +1,114 @@
+<div style="height: 100vh" class="d-flex flex-column">
+  <div class="c-bg-secondary-dark d-flex" style="height: 90px">
+    <div class="d-flex align-items-center mx-5">
+      <button class="btn btn-lg btn-light" (click)="back()">
+        <i class="bi bi-chevron-left"></i> Back
+      </button>
+    </div>
+  </div>
+
+  @if (state.receipt()) {
+    <div
+      class="flex-grow-1 d-flex flex-column align-items-center justify-content-center"
+    >
+      <div id="receipt" class="p-4">
+        <h2 class="receipt-title">PLZEŇSKÁ PIVNICE</h2>
+
+        <div>Česká 5, Brno 60200</div>
+        <div>Telefon: +420 517 070 080</div>
+        <div>{{ "info@stopkovaplzenskapivnice.cz" }}</div>
+
+        <div class="section">Gastro Stopkova pivnice</div>
+        <div>U družstev 1012/5, 140 00 Praha 4</div>
+        <div>IČO: 28454294, DIČ: CZ28454294</div>
+        <div class="mb-3">OR, vedený MS v Praze, odd.C, v1. 142685</div>
+
+        -------------------------------------
+
+        <div class="d-flex justify-content-between mx-5">
+          <div>Datum:</div>
+          <div>{{ formatDate(state.receipt()!.date) }}</div>
+        </div>
+        <div class="d-flex justify-content-between mx-5">
+          <div>Stůl:</div>
+          <div>{{ state.receipt()?.tableDescribtion }}</div>
+        </div>
+
+        <div class="d-flex justify-content-between mx-5">
+          <div>Číšník:</div>
+          <div>{{ state.receipt()?.waiter }}</div>
+        </div>
+        <div class="d-flex justify-content-between mx-5">
+          <div>Pokladna:</div>
+          <div>Restaurace I</div>
+        </div>
+
+        -------------------------------------
+
+        @for (item of state.receipt()?.items; track item.menuItem.id) {
+          <div class="d-flex justify-content-between mx-5">
+            <div>{{ item.count }} x {{ itemDescribtion(item.menuItem) }}</div>
+            <div>{{ item.menuItem.price.toFixed(2) }} Kč</div>
+          </div>
+        }
+
+        -------------------------------------
+        <div class="d-flex justify-content-between mx-5 mb-3">
+          <div>Součet záloh:</div>
+          <div>0.00 Kč</div>
+        </div>
+
+        <div class="d-flex justify-content-between mx-5">
+          <div>Placeno hotově:</div>
+          <div>{{ state.receipt()?.paid?.toFixed(2) }} Kč</div>
+        </div>
+
+        <div class="d-flex justify-content-between mx-5">
+          <div>Vráceno:</div>
+          <div>{{ state.receipt()?.returned?.toFixed(2) }} Kč</div>
+        </div>
+        <div class="my-3">*************************************</div>
+
+        <div class="d-flex justify-content-between mx-5">
+          <div>Zákazník:</div>
+          <div>Příchozí zákazník</div>
+        </div>
+        <div class="d-flex justify-content-between mx-5">
+          <div>Cenová kategorie:</div>
+          <div>běžné ceny</div>
+        </div>
+        <div class="d-flex justify-content-between mx-5">
+          <div>Cena bez DPH:</div>
+          <div>{{ state.receipt()?.noVatTotalPrice?.toFixed(2) }} Kč</div>
+        </div>
+        @for (vat of vats(); track vat[0]) {
+          <div class="d-flex justify-content-between mx-5">
+            <div>DPH {{ vat[0] }}% (VAT):</div>
+            <div>{{ vat[1].toFixed(2) }} Kč</div>
+          </div>
+        }
+        <div class="d-flex justify-content-between mx-5 my-3">
+          <div class="fs-5">Celkem:</div>
+          <div class="fs-5">
+            {{ state.receipt()?.totalPrice?.toFixed(2) }} Kč
+          </div>
+        </div>
+
+        <div>Děkujeme za Vaší návštěvu</div>
+        -------------------------------------
+        <div class="fs-5">TIPS AREN'T INCLUDED</div>
+        -------------------------------------
+        <div>www.kolkovna.cz</div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg mt-4 float-end"
+        form="tableDescribtionFrom"
+        (click)="downloadReceipt()"
+      >
+        Download PDF
+      </button>
+    </div>
+  }
+</div>

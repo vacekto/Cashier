@@ -11,9 +11,11 @@
           <h5 class="card-title m-0">
             {{ table.describtion }}
           </h5>
-          <small class="position-absolute bottom-0 end-0 m-2">{{
-            table.price
-          }}</small>
+          @if (+table.price !== 0) {
+            <small class="position-absolute bottom-0 end-0 m-2"
+              >{{ table.price }} CZK</small
+            >
+          }
         </div>
       </div>
     }

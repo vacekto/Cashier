@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import com.cashier.records.MenuRecord;
+
+import com.cashier.DTOs.MenuDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -25,7 +26,7 @@ public abstract class MenuItem {
     return MenuItem.store.get(id);
   }
 
-  public static MenuRecord getMenu() {
+  public static MenuDTO getMenu() {
     List<Meal> meals = new ArrayList<Meal>();
     List<Drink> drinks = new ArrayList<Drink>();
 
@@ -35,7 +36,7 @@ public abstract class MenuItem {
       if (item instanceof Meal)
         meals.add((Meal) item);
     }
-    return new MenuRecord(meals, drinks);
+    return new MenuDTO(meals, drinks);
   }
 
   public static void loadMenuItems() {
@@ -60,11 +61,11 @@ public abstract class MenuItem {
     MEAL, DRINK
   }
 
-  private final String name;
-  private final double price;
-  private final Type type;
-  private String id;
-  private final double VAT;
+  final String name;
+  final double price;
+  final Type type;
+  String id;
+  final double VAT;
 
   protected MenuItem(String name, double price, Type type, double vat) {
     String id = UUID.randomUUID().toString();
@@ -73,6 +74,10 @@ public abstract class MenuItem {
     this.price = price;
     this.type = type;
     this.VAT = vat;
+  }
+
+  public String getId() {
+    return id;
   }
 
   @Override

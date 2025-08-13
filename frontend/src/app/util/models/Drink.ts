@@ -1,4 +1,4 @@
-import { MenuItemDTO } from "../types/API";
+import { MenuItemDTO } from "../types/APItypes";
 import { MenuItem } from "./MenuItem";
 
 export class Drink implements MenuItem {

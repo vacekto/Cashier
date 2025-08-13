@@ -4,8 +4,8 @@ import { ENV } from "../../environments/environment";
 import { StateService } from "./state-service";
 import { ToastService } from "./toast-service";
 import { Table } from "../util/models/Table";
-import { TableDTO } from "../util/types/API";
-import { Waiter } from "../util/types/app";
+import { TableDTO } from "../util/types/APItypes";
+import { Waiter } from "../util/types/apptypes";
 
 export type SocketMessage =
   | {
@@ -63,14 +63,13 @@ export class WsService {
     }
   }
 
-  public listenForMessages() {
+  public subscribeForServerEvents() {
     this.socket$.subscribe({
       next: (msg) => this.handleMsg(msg),
       error: (err) => {
         this.toast.addToast("WS error", "Web socket connection error", "ERROR");
         console.error("Socket error:", err);
       },
-      complete: () => console.warn("Socket connection closed"),
     });
   }
 

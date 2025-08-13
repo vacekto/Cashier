@@ -1,13 +1,11 @@
 package com.cashier.data;
 
-import java.time.Instant;
-
 public class OrderedItem {
   final MenuItem menuItem;
-  final Instant orderedAt;
+  int count;
 
-  public OrderedItem(String menuItemId) {
+  public OrderedItem(String menuItemId, int count) {
     this.menuItem = MenuItem.getItemById(menuItemId);
-    this.orderedAt = Instant.now();
+    this.count = count;
   }
 }

@@ -1,20 +1,45 @@
 import { Component, computed, effect, OnInit, signal } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  Validators,
+} from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { StateService } from "../../services/state-service";
 import { ToastService } from "../../services/toast-service";
 import { Router } from "@angular/router";
-import { OrderedItem } from "../../util/types/app";
+import { OrderedItem } from "../../util/types/apptypes";
+import { DataService } from "../../services/data-service";
+import { ItemDTO, ReceiptDTO } from "../../util/types/APItypes";
 
 @Component({
   selector: "app-payment",
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: "./payment.html",
   styleUrl: "./payment.scss",
 })
 export class Payment implements OnInit {
+  form = new FormGroup({
+    age: new FormControl("", [Validators.required, Validators.min(18)]),
+  });
+
+  orderItems = signal<OrderedItem[]>([]);
+  receiptItems = signal<OrderedItem[]>([]);
+  paidAmount = 0;
+  receiptPrice = computed(() => {
+    let price = 0;
+    for (let item of this.receiptItems()) {
+      price += item.menuItem.price * item.count;
+    }
+
+    return price;
+  });
+  errorMsg: string | null = null;
+
   constructor(
     public state: StateService,
+    public data: DataService,
     public toasts: ToastService,
     private router: Router,
   ) {
@@ -29,20 +54,6 @@ export class Payment implements OnInit {
   ngOnInit(): void {
     if (!this.state.selectedTable()) this.router.navigate(["/"]);
   }
-
-  orderItems = signal<OrderedItem[]>([]);
-  receiptItems = signal<OrderedItem[]>([]);
-
-  receiptPrice = computed(() => {
-    let price = 0;
-    for (let item of this.receiptItems()) {
-      price += item.menuItem.price * item.count;
-    }
-
-    return price;
-  });
-
-  test() {}
 
   addSingleItemToReceipt(itemId: string) {
     const idx = this.orderItems().findIndex((i) => i.menuItem.id === itemId)!;
@@ -77,9 +88,8 @@ export class Payment implements OnInit {
 
   addAllItemsToReceipt(itemId: string) {
     const idx = this.orderItems().findIndex((i) => i.menuItem.id === itemId)!;
-    const item = this.orderItems()[idx];
-
     const update = this.orderItems().map((i) => ({ ...i }));
+    const item = this.orderItems()[idx];
     update.splice(idx, 1);
 
     this.orderItems.set(update);
@@ -90,6 +100,7 @@ export class Payment implements OnInit {
 
     if (receiptItem) {
       receiptItem.count += item.count;
+      this.receiptItems.update((prev) => [...prev]);
       return;
     }
 
@@ -119,23 +130,40 @@ export class Payment implements OnInit {
     this.router.navigate(["/"]);
   }
 
-  pay() {
-    if (!this.state.paymentMethod()) {
-      this.toasts.addToast(
-        "Payment method not selected",
-        "Payment method must be selected",
-        "WARNING",
-      );
-      return;
+  async pay() {
+    if (this.receiptPrice() > this.paidAmount) {
     }
 
-    if (+this.receiptPrice === 0) {
-      this.toasts.addToast(
-        "Nothing to pay",
-        "Payment method must be selected",
-        "WARNING",
-      );
-      return;
+    const isValid = !isNaN(Number(this.paidAmount));
+    if (!isValid) {
+      // this.errorMsg = "";
     }
+
+    const items: ItemDTO[] = this.receiptItems().map((i) => ({
+      count: i.count,
+      menuItemId: i.menuItem.id,
+    }));
+
+    const paymentMethod = this.state.paymentMethod();
+    if (!paymentMethod) throw new Error("no payment selected");
+
+    const totalPrice = this.receiptItems().reduce(
+      (acc, item) => acc + item.menuItem.price * item.count,
+      0,
+    );
+
+    const receipt: ReceiptDTO = {
+      items,
+      paymentMethod,
+      tableDescribtion: this.state.selectedTable()!.describtion,
+      tableId: this.state.selectedTable()!.id,
+      totalPrice: totalPrice,
+      waiter: this.state.selectedWaiter()!.name,
+      paidAmount: this.paidAmount,
+    };
+
+    const result = await this.data.sendReceipt(receipt);
+    this.state.setReceipt(result);
+    this.router.navigate(["receipt"]);
   }
 }

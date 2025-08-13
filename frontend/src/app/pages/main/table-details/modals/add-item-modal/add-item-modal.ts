@@ -14,8 +14,8 @@ import { FilteredInput } from "../../../../../components/filtered-input/filtered
 import { ToastService } from "../../../../../services/toast-service";
 import { DataService } from "../../../../../services/data-service";
 import { Modal } from "bootstrap";
-import { NewItemDTO, NewOrderDTO } from "../../../../../util/types/API";
-import { OrderedItem } from "../../../../../util/types/app";
+import { ItemDTO, OrderDTO } from "../../../../../util/types/APItypes";
+import { OrderedItem } from "../../../../../util/types/apptypes";
 
 @Component({
   selector: "app-add-item-modal",
@@ -27,6 +27,10 @@ export class AddItemModal implements AfterViewInit {
   @ViewChild("addItemModal", { static: false })
   modalElement!: ElementRef<HTMLElement>;
   modalInstance!: Modal;
+
+  orders = signal<OrderedItem[]>([]);
+  isButtonDisabled = computed(() => this.orders().length === 0);
+  menuItemsStr: string[] = [];
 
   constructor(
     public state: StateService,
@@ -44,10 +48,6 @@ export class AddItemModal implements AfterViewInit {
       this.modalElement.nativeElement,
     );
   }
-
-  orders = signal<OrderedItem[]>([]);
-  isButtonDisabled = computed(() => this.orders().length === 0);
-  menuItemsStr: string[] = [];
 
   increment(id: string) {
     this.orders.update((prev) => {
@@ -93,12 +93,12 @@ export class AddItemModal implements AfterViewInit {
     const tableId = this.state.selectedTable()?.id;
     if (!tableId) return;
 
-    const orderedItems: NewItemDTO[] = this.orders().map((item) => ({
+    const orderedItems: ItemDTO[] = this.orders().map((item) => ({
       menuItemId: item.menuItem.id,
       count: item.count,
     }));
 
-    const newOrder: NewOrderDTO = {
+    const newOrder: OrderDTO = {
       orderedItems,
       tableId,
     };

@@ -1,15 +1,8 @@
 package com.cashier.services;
 
 import static spark.Spark.*;
-import com.cashier.data.MenuItem;
-import com.cashier.data.OrderedItem;
-import com.cashier.data.Table;
-import com.cashier.data.Waiter;
-import com.cashier.records.MenuRecord;
-import com.cashier.records.NewItemRecord;
-import com.cashier.records.NewOrderRecord;
-import com.cashier.records.NewTableRecord;
-import com.cashier.records.NewWaiterRecord;
+import com.cashier.DTOs.*;
+import com.cashier.data.*;
 import com.google.gson.Gson;
 
 public class HttpService {
@@ -26,7 +19,7 @@ public class HttpService {
 
     get("/menu", (_, res) -> {
       res.type("application/json");
-      MenuRecord menu = MenuItem.getMenu();
+      MenuDTO menu = MenuItem.getMenu();
       return menu;
     }, gson::toJson);
 
@@ -42,30 +35,30 @@ public class HttpService {
 
     post("/waiter", (req, res) -> {
       res.type("application/json");
-      NewWaiterRecord nwr = gson.fromJson(req.body(), NewWaiterRecord.class);
-      Waiter newWaiter = new Waiter(nwr.name());
+      NewWaiterDTO newWaiterDTO = gson.fromJson(req.body(), NewWaiterDTO.class);
+      Waiter newWaiter = new Waiter(newWaiterDTO.name());
       this.wsService.newWaiter(newWaiter);
       return "{}";
     }, gson::toJson);
 
     post("/table", (req, res) -> {
       res.type("application/json");
-      NewTableRecord ntr = gson.fromJson(req.body(), NewTableRecord.class);
-      Table table = new Table(ntr.tableDescription());
+      NewTableDTO newTableDTO = gson.fromJson(req.body(), NewTableDTO.class);
+      Table table = new Table(newTableDTO.tableDescription());
       this.wsService.newTable(table);
       return "{}";
     }, gson::toJson);
 
     post("/table/order", (req, res) -> {
       res.type("application/json");
-      NewOrderRecord nor = gson.fromJson(req.body(), NewOrderRecord.class);
-      Table table = Table.getTableById(nor.tableId());
-      for (NewItemRecord nir : nor.orderedItems()) {
-        for (int i = 0; i < nir.count(); i++) {
-          OrderedItem newOrderedItem = new OrderedItem(nir.menuItemId());
-          table.addOrder(newOrderedItem);
-        }
+      OrderDTO OrderDTO = gson.fromJson(req.body(), OrderDTO.class);
+      Table table = Table.getTableById(OrderDTO.tableId());
+
+      for (ItemDTO ItemDTO : OrderDTO.orderedItems()) {
+        OrderedItem newOrderedItem = new OrderedItem(ItemDTO.menuItemId(), ItemDTO.count());
+        table.addOrder(newOrderedItem);
       }
+
       this.wsService.tableUpdate(table);
 
       return "{}";
@@ -73,8 +66,12 @@ public class HttpService {
 
     post("/table/receipt", (req, res) -> {
       res.type("application/json");
-
-      return "{}";
+      ReceiptDTO receiptDTO = gson.fromJson(req.body(), ReceiptDTO.class);
+      Receipt receipt = new Receipt(receiptDTO);
+      Table table = Table.getTableById(receiptDTO.tableId());
+      table.removeItems(receiptDTO.items());
+      this.wsService.tableUpdate(table);
+      return receipt;
     }, gson::toJson);
 
   }

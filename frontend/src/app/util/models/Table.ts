@@ -1,7 +1,7 @@
 import { Drink } from "./Drink";
 import { Meal } from "./Meal";
-import { TableDTO } from "../types/API";
-import { OrderedItem } from "../types/app";
+import { TableDTO } from "../types/APItypes";
+import { OrderedItem } from "../types/apptypes";
 
 export class Table {
   id: string;
@@ -16,7 +16,7 @@ export class Table {
     for (const item of dto.items) {
       const present = menuItems.find((i) => i.menuItem.id === item.menuItem.id);
       if (present) {
-        present.count++;
+        present.count += item.count;
         continue;
       }
 
@@ -24,7 +24,7 @@ export class Table {
         item.menuItem.type === "DRINK"
           ? new Drink(item.menuItem)
           : new Meal(item.menuItem);
-      menuItems.push({ menuItem: instance, count: 1 });
+      menuItems.push({ menuItem: instance, count: item.count });
     }
     this.items = menuItems;
   }

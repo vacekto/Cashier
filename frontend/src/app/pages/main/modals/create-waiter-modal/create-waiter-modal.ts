@@ -38,20 +38,26 @@ export class CreateWaiterModal implements AfterViewInit {
     );
   }
 
-  submit() {
-    const waiterName = this.waiterName;
-    if (waiterName.trim().length < 6) {
-      this.errorMsg = "Waiter name needs to include at least 6 symbols";
+  submit(form: any) {
+    if (form.invalid) {
+      Object.values(form.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
       return;
     }
 
+    const waiterName = this.waiterName;
     if (this.state.waiters().some((w) => w.name === waiterName)) {
       this.errorMsg = `Waiter name "${waiterName}" is already taken`;
+      Object.values(form.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
       return;
     }
 
     this.data.registerWaiter(this.waiterName);
     this.modalInstance.hide();
+    form.resetForm();
 
     this.errorMsg = "";
     this.waiterName = "";

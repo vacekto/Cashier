@@ -10,6 +10,5 @@ class Config {
     Dotenv dotenv = Dotenv.load();
     HTTP_PORT = Integer.parseInt(dotenv.get("HTTP_PORT"));
     WS_PORT = Integer.parseInt(dotenv.get("WS_PORT"));
-
   }
 }

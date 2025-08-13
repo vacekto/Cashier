@@ -49,6 +49,7 @@ class HTTPServer {
   }
 
   HTTPServer(int port, Gson gson, HttpService httpService) {
+    Spark.ipAddress("0.0.0.0");
     Spark.port(port);
     staticFileLocation("/public");
     applyCors();

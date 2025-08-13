@@ -1,4 +1,5 @@
-import { PaymentMethod } from "./app";
+import { MenuItem } from "../models/MenuItem";
+import { PAYMENT_METHOD } from "./apptypes";
 
 export type MenuItemDTO = {
   name: string;
@@ -19,17 +20,16 @@ export type TableDTO = {
   describtion: string;
   items: {
     menuItem: MenuItemDTO;
-    createdAt: string;
-    // count: number;
+    count: number;
   }[];
 };
 
-export type NewOrderDTO = {
+export type OrderDTO = {
   tableId: string;
-  orderedItems: NewItemDTO[];
+  orderedItems: ItemDTO[];
 };
 
-export type NewItemDTO = {
+export type ItemDTO = {
   menuItemId: string;
   count: number;
 };
@@ -37,9 +37,9 @@ export type NewItemDTO = {
 export type ReceiptDTO = {
   tableId: string;
   tableDescribtion: string;
-  items: NewItemDTO[];
+  items: ItemDTO[];
   waiter: string;
-  paymentMethod: PaymentMethod;
+  paymentMethod: PAYMENT_METHOD;
   totalPrice: number;
-  returned: number;
+  paidAmount: number;
 };

@@ -29,22 +29,29 @@ export class CreateTableModal implements AfterViewInit {
     );
   }
 
-  submit() {
-    const describtion = this.tableDescripbtion;
-    if (describtion.trim().length < 6) {
-      this.errorMsg = "Table describtion needs to include at least 6 symbols";
+  submit(form: any) {
+    if (form.invalid) {
+      Object.values(form.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
       return;
     }
 
-    if (this.state.tables().some((w) => w.describtion === describtion)) {
-      this.errorMsg = `Table describtion "${describtion}" is already taken`;
+    const describtion = this.tableDescripbtion.trim();
+    if (this.state.tables().some((t) => t.describtion === describtion)) {
+      this.errorMsg = `Table description "${describtion}" is already taken`;
+      Object.values(form.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
+      console.log("cosikdosi");
       return;
     }
 
-    this.data.createTable(this.tableDescripbtion);
+    this.data.createTable(describtion);
     this.modalInstance.hide();
 
     this.errorMsg = "";
     this.tableDescripbtion = "";
+    form.resetForm();
   }
 }

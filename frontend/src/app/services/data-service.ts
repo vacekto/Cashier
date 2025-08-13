@@ -1,8 +1,13 @@
 import { Injectable } from "@angular/core";
 import { ENV } from "../../environments/environment";
 import { ToastService } from "./toast-service";
-import { MenuDTO, NewOrderDTO, TableDTO } from "../util/types/API";
-import { Waiter } from "../util/types/app";
+import {
+  MenuDTO,
+  OrderDTO,
+  ReceiptDTO,
+  TableDTO,
+} from "../util/types/APItypes";
+import { Waiter } from "../util/types/apptypes";
 
 @Injectable({
   providedIn: "root",
@@ -60,12 +65,21 @@ export class DataService {
     return this.fetchAPIResource<Waiter[]>("/waiters");
   }
 
-  async sendNewOrder(newOrder: NewOrderDTO) {
+  async sendNewOrder(newOrder: OrderDTO) {
     const options: RequestInit = {
       method: "POST",
       body: JSON.stringify(newOrder),
     };
 
     return this.fetchAPIResource<{}>("/table/order", options);
+  }
+
+  async sendReceipt(newOrder: ReceiptDTO) {
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify(newOrder),
+    };
+
+    return this.fetchAPIResource<any>("/table/receipt", options);
   }
 }
