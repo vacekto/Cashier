@@ -1,6 +1,6 @@
 #### about
 
-simple angular / java interview task implementing restaurant cashier. The app holds web socket connection with the server, sends updates via few REST endpoints to the server, which in turn sends updates via web socket connection to all connected clients. That way all waiters can have their own app running and in sync with each other. App is also responsive, so can be viewd on tablet or even phone.
+simple angular / java project implementing restaurant cashier. The app holds web socket connection with the server, sends updates via few REST endpoints to the server, which in turn sends updates via web socket connection to all connected clients. That way all waiters can have their own app running and in sync with each other. App is also responsive, so can be viewd on tablet or even phone.
 
 #### how to run
 
