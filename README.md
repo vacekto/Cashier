@@ -10,6 +10,4 @@ either
 
 or
 - docker build -t cashier . (in backend folder)
-- docker run --rm -it -p 3000:3000 -p 3001:3001 \                                                                                                                                ✔ 
-  -e HTTP_PORT=3000 -e WS_PORT=3001 \
-  cashier2
+- docker run --rm -it -p 3000:3000 -p 3001:3001 -e HTTP_PORT=3000 -e WS_PORT=3001 cashier2
