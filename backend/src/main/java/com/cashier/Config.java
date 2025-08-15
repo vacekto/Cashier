@@ -8,10 +8,10 @@ class Config {
 
   static void init() {
     Dotenv dotenv = Dotenv.configure()
-      ignoreIfMissing() 
-      load();
+        .ignoreIfMissing()
+        .load();
 
     HTTP_PORT = Integer.parseInt(dotenv.get("HTTP_PORT", "8080"));
-    WS_PORT   = Integer.parseInt(dotenv.get("WS_PORT", "3000"));
+    WS_PORT = Integer.parseInt(dotenv.get("WS_PORT", "3000"));
   }
 }
