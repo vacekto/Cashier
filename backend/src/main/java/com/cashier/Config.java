@@ -7,8 +7,11 @@ class Config {
   public static int WS_PORT;
 
   static void init() {
-    Dotenv dotenv = Dotenv.load();
-    HTTP_PORT = Integer.parseInt(dotenv.get("HTTP_PORT"));
-    WS_PORT = Integer.parseInt(dotenv.get("WS_PORT"));
+    Dotenv dotenv = Dotenv.configure()
+      ignoreIfMissing() 
+      load();
+
+    HTTP_PORT = Integer.parseInt(dotenv.get("HTTP_PORT", "8080"));
+    WS_PORT   = Integer.parseInt(dotenv.get("WS_PORT", "3000"));
   }
 }
